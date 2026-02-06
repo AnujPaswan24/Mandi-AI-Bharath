@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Mandi AI - भारत का डिजिटल बाज़ार। Real-time market prices, multilingual support, and seamless trading experience.">
+    <meta name="theme-color" content="#FF9933">
+    <title>Mandi AI - Bharat ka Bazaar</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="flag-colors">
+                    <div class="saffron"></div>
+                    <div class="white"></div>
+                    <div class="green"></div>
+                </div>
+                <h1>Mandi AI</h1>
+                <p class="subtitle">भारत का बाज़ार</p>
+            </div>
+            <div class="language-selector">
+                <select id="languageSelect">
+                    <option value="hi">हिंदी</option>
+                    <option value="en">English</option>
+                    <option value="ta">தமிழ்</option>
+                    <option value="te">తెలుగు</option>
+                    <option value="bn">বাংলা</option>
+                    <option value="gu">ગુજરાતી</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Main Section -->
+        <main class="main-section">
+            <div class="speak-section">
+                <h2>बोलें और अनुवाद करें</h2>
+                <button class="mic-button" id="micButton">
+                    <svg class="mic-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                    </svg>
+                    <span class="mic-text">माइक दबाएं</span>
+                </button>
+                <div class="status-text" id="statusText">बोलने के लिए तैयार</div>
+            </div>
+
+            <!-- Chat Window -->
+            <div class="chat-window">
+                <div class="chat-header">
+                    <h3>बातचीत / Negotiation</h3>
+                    <div class="participants">
+                        <span class="farmer">किसान</span>
+                        <span class="buyer">खरीदार</span>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message farmer-message">
+                        <div class="message-content">
+                            <div class="original">मेरे पास अच्छे टमाटर हैं, 40 रुपये किलो</div>
+                            <div class="translation">I have good tomatoes, 40 rupees per kg</div>
+                        </div>
+                    </div>
+                    <div class="message buyer-message">
+                        <div class="message-content">
+                            <div class="original">Can you do 35 rupees per kg?</div>
+                            <div class="translation">क्या आप 35 रुपये किलो कर सकते हैं?</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="यहाँ टाइप करें या माइक का उपयोग करें...">
+                    <button class="send-button" id="sendButton">भेजें</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Live News Ticker -->
+            <div class="news-ticker">
+                <div class="ticker-header">
+                    <span class="live-indicator">🔴 LIVE</span>
+                    <span>मंडी समाचार / Market News</span>
+                </div>
+                <div class="ticker-container">
+                    <div class="ticker-content" id="tickerContent">
+                        <span class="ticker-item">गेहूं की कीमत में 2% की वृद्धि • Wheat prices up 2% • </span>
+                        <span class="ticker-item">प्याज का निर्यात बढ़ा • Onion exports increased • </span>
+                        <span class="ticker-item">टमाटर की नई किस्म बाजार में • New tomato variety in market • </span>
+                        <span class="ticker-item">मानसून की बारिश से फसल में सुधार • Monsoon improves crop yield • </span>
+                        <span class="ticker-item">किसान सब्सिडी योजना शुरू • Farmer subsidy scheme launched • </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="price-ticker">
+                <h3>मंडी भाव / Market Rates</h3>
+                <div class="ticker-scroll">
+                    <div class="price-item">
+                        <div class="commodity">गेहूं / Wheat</div>
+                        <div class="cities">
+                            <div class="city-price">दिल्ली: ₹2,150/क्विंटल</div>
+                            <div class="city-price">मुंबई: ₹2,200/क्विंटल</div>
+                            <div class="city-price">पंजाब: ₹2,100/क्विंटल</div>
+                        </div>
+                    </div>
+                    <div class="price-item">
+                        <div class="commodity">प्याज / Onions</div>
+                        <div class="cities">
+                            <div class="city-price">नासिक: ₹25/किलो</div>
+                            <div class="city-price">बेंगलुरु: ₹30/किलो</div>
+                            <div class="city-price">कोलकाता: ₹28/किलो</div>
+                        </div>
+                    </div>
+                    <div class="price-item">
+                        <div class="commodity">टमाटर / Tomatoes</div>
+                        <div class="cities">
+                            <div class="city-price">चेन्नई: ₹35/किलो</div>
+                            <div class="city-price">हैदराबाद: ₹32/किलो</div>
+                            <div class="city-price">पुणे: ₹38/किलो</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="last-updated">अंतिम अपडेट: 2 मिनट पहले</div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3>त्वरित कार्य</h3>
+                <button class="action-button">
+                    <span class="icon">📊</span>
+                    <span>आज के भाव</span>
+                </button>
+                <button class="action-button">
+                    <span class="icon">🚚</span>
+                    <span>ट्रांसपोर्ट</span>
+                </button>
+                <button class="action-button">
+                    <span class="icon">💰</span>
+                    <span>पेमेंट</span>
+                </button>
+                <button class="action-button">
+                    <span class="icon">📞</span>
+                    <span>संपर्क</span>
+                </button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>मंडी AI</h4>
+                <p>भारत का डिजिटल बाज़ार</p>
+            </div>
+            <div class="footer-section">
+                <h4>सेवाएं</h4>
+                <p>भाषा अनुवाद • मूल्य जानकारी • व्यापार सहायता</p>
+            </div>
+            <div class="footer-section">
+                <h4>संपर्क</h4>
+                <p>सहायता: 1800-MANDI-AI</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
