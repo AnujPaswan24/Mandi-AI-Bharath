@@ -1,26 +1,84 @@
-# Design Document: The Multilingual Mandi
+# Design Document: Mandi AI - Bharat ka Bazaar
 
-## Overview
+## Project Overview
 
-The Multilingual Mandi is a progressive web application designed to bridge language barriers in Indian agricultural markets. The system provides real-time voice and text translation, live market pricing, and bilingual negotiation tools through an accessible, mobile-first interface optimized for rural users with limited technical literacy.
+**Track:** Student Track  
+**Category:** AI for Communities, Access & Public Impact  
+**Hackathon:** AWS AI for Bharat Hackathon
 
-## Architecture
+Mandi AI is an AWS-powered progressive web application designed to bridge language barriers and information gaps in Indian agricultural markets. The system leverages Amazon Bedrock for AI-powered natural language processing, AWS Lambda for serverless backend operations, and API Gateway for seamless API management, providing real-time voice and text translation, live market pricing, AI-driven agricultural advisory, and bilingual negotiation tools through an accessible, mobile-first, voice-first interface optimized for rural users with limited technical literacy.
 
-### System Components
+**Impact:** Empowering 120+ million Indian farmers with fair market access, transparent pricing, and AI-powered agricultural guidance in their native languages.
+
+## AWS-First Architecture
+
+### High-Level System Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Frontend Layer (User Device)                 │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
+│  │ Voice-First  │  │  Responsive  │  │   Offline    │         │
+│  │     UI       │  │   Web App    │  │    Cache     │         │
+│  └──────────────┘  └──────────────┘  └──────────────┘         │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓ HTTPS
+┌─────────────────────────────────────────────────────────────────┐
+│                    AWS API Gateway Layer                        │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │  REST API Endpoints                                       │  │
+│  │  • /prices/{crop}        • /translate                    │  │
+│  │  • /ai-advice            • /market-trends                │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                    AWS Lambda Functions                         │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
+│  │   Price      │  │  Translation │  │  AI Advisory │         │
+│  │   Fetcher    │  │   Service    │  │   Service    │         │
+│  └──────────────┘  └──────────────┘  └──────────────┘         │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                    Amazon Bedrock                               │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │  Foundation Models                                        │  │
+│  │  • Natural Language Understanding                        │  │
+│  │  • Multilingual Translation                              │  │
+│  │  • Agricultural Knowledge Base                           │  │
+│  │  • Context-Aware Responses                               │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                    External Services                            │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
+│  │  Government  │  │   Weather    │  │   Market     │         │
+│  │  Mandi APIs  │  │     APIs     │  │  Data APIs   │         │
+│  └──────────────┘  └──────────────┘  └──────────────┘         │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Detailed Component Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    User Interface Layer                     │
 ├─────────────────────────────────────────────────────────────┤
-│  Mobile-First UI  │  Voice Interface  │  Chat Interface    │
+│  Voice-First UI  │  Mobile Interface  │  Chat Interface    │
 ├─────────────────────────────────────────────────────────────┤
 │                   Application Layer                         │
 ├─────────────────────────────────────────────────────────────┤
-│ Translation Engine │ Price Discovery  │ Negotiation Manager│
+│ Bedrock Client │ API Gateway Client │ Offline Manager      │
 ├─────────────────────────────────────────────────────────────┤
-│                    Service Layer                            │
+│                    AWS Service Layer                        │
 ├─────────────────────────────────────────────────────────────┤
-│   Speech API      │   Market API     │   Storage Service   │
+│   API Gateway     │   Lambda Functions   │  Amazon Bedrock │
+├─────────────────────────────────────────────────────────────┤
+│                    Integration Layer                        │
+├─────────────────────────────────────────────────────────────┤
+│  Market APIs      │   Weather APIs    │   Storage Service  │
 ├─────────────────────────────────────────────────────────────┤
 │                    Data Layer                               │
 ├─────────────────────────────────────────────────────────────┤
@@ -30,12 +88,32 @@ The Multilingual Mandi is a progressive web application designed to bridge langu
 
 ### Technology Stack
 
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Speech Recognition**: Web Speech API with fallback to cloud services
-- **Translation**: Browser-based translation with cloud API backup
-- **Storage**: LocalStorage, IndexedDB for offline capability
-- **Styling**: CSS Grid, Flexbox for responsive design
-- **PWA Features**: Service Worker, Web App Manifest
+**Frontend:**
+- HTML5, CSS3, JavaScript (ES6+)
+- Web Speech API for voice input/output
+- Responsive Design (Mobile-First)
+- Progressive Web App (PWA) capabilities
+
+**AWS Backend:**
+- **Amazon Bedrock**: Foundation models for NLP, translation, and agricultural AI advisory
+- **AWS Lambda**: Serverless functions (Python 3.11) for business logic
+- **API Gateway**: RESTful API management and routing
+- **CloudWatch**: Logging and monitoring
+
+**External Integrations:**
+- Government Mandi APIs (data.gov.in)
+- Agricultural market data providers
+- Weather APIs for farming insights
+
+**Storage & Caching:**
+- LocalStorage for offline capability
+- IndexedDB for structured data caching
+- Session Storage for temporary state
+
+**Development & Deployment:**
+- Git for version control
+- AWS SAM/CloudFormation for infrastructure as code
+- GitHub for repository hosting
 
 ## User Interface Design
 
@@ -147,6 +225,508 @@ The Multilingual Mandi is a progressive web application designed to bridge langu
 ```
 
 ## Functional Design
+
+### AWS Lambda Functions
+
+#### Lambda Function 1: Price Fetcher (Python 3.11)
+
+**Purpose:** Fetch real-time market prices for agricultural commodities
+
+**File:** `lambda_price_fetcher.py`
+
+```python
+import json
+import boto3
+import requests
+from datetime import datetime
+from decimal import Decimal
+
+def lambda_handler(event, context):
+    """
+    Fetch market prices for specified crop
+    
+    API Gateway Event Structure:
+    {
+        "pathParameters": {
+            "crop": "wheat"
+        },
+        "queryStringParameters": {
+            "location": "delhi"
+        }
+    }
+    """
+    
+    try:
+        # Extract parameters
+        crop_name = event.get('pathParameters', {}).get('crop', '').lower()
+        location = event.get('queryStringParameters', {}).get('location', 'all')
+        
+        if not crop_name:
+            return {
+                'statusCode': 400,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps({
+                    'error': 'Crop name is required',
+                    'message': 'Please provide a crop name in the path'
+                })
+            }
+        
+        # Fetch data from government Mandi API
+        mandi_api_url = f"https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070"
+        
+        params = {
+            'api-key': 'YOUR_API_KEY',  # Replace with actual API key
+            'format': 'json',
+            'filters[commodity]': crop_name.capitalize(),
+            'limit': 10
+        }
+        
+        if location != 'all':
+            params['filters[market]'] = location.capitalize()
+        
+        response = requests.get(mandi_api_url, params=params, timeout=5)
+        response.raise_for_status()
+        
+        data = response.json()
+        records = data.get('records', [])
+        
+        if not records:
+            # Return mock data for demo purposes
+            records = generate_mock_data(crop_name, location)
+        
+        # Process and format the data
+        processed_data = process_market_data(records, crop_name)
+        
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Cache-Control': 'max-age=1800'  # Cache for 30 minutes
+            },
+            'body': json.dumps(processed_data, default=decimal_default)
+        }
+        
+    except requests.exceptions.RequestException as e:
+        print(f"API Request Error: {str(e)}")
+        return {
+            'statusCode': 503,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({
+                'error': 'Service Unavailable',
+                'message': 'Unable to fetch market data. Please try again later.'
+            })
+        }
+    
+    except Exception as e:
+        print(f"Unexpected Error: {str(e)}")
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({
+                'error': 'Internal Server Error',
+                'message': 'An unexpected error occurred'
+            })
+        }
+
+def process_market_data(records, crop_name):
+    """Process and structure market data"""
+    
+    prices_by_location = {}
+    
+    for record in records:
+        location = record.get('market', 'Unknown')
+        modal_price = record.get('modal_price', 0)
+        min_price = record.get('min_price', 0)
+        max_price = record.get('max_price', 0)
+        
+        if location not in prices_by_location:
+            prices_by_location[location] = {
+                'location': location,
+                'commodity': crop_name.capitalize(),
+                'modal_price': float(modal_price) if modal_price else 0,
+                'min_price': float(min_price) if min_price else 0,
+                'max_price': float(max_price) if max_price else 0,
+                'unit': 'per quintal',
+                'currency': 'INR',
+                'timestamp': datetime.now().isoformat(),
+                'source': 'Government Mandi API'
+            }
+    
+    return {
+        'commodity': crop_name.capitalize(),
+        'prices': list(prices_by_location.values()),
+        'fetched_at': datetime.now().isoformat(),
+        'total_markets': len(prices_by_location)
+    }
+
+def generate_mock_data(crop_name, location):
+    """Generate mock data for demonstration"""
+    
+    mock_prices = {
+        'wheat': {'delhi': 2150, 'mumbai': 2200, 'punjab': 2100},
+        'onion': {'nasik': 25, 'bangalore': 30, 'kolkata': 28},
+        'potato': {'agra': 18, 'delhi': 20, 'mumbai': 22},
+        'tomato': {'chennai': 35, 'hyderabad': 32, 'pune': 38},
+        'rice': {'delhi': 3500, 'mumbai': 3600, 'kolkata': 3400}
+    }
+    
+    crop_data = mock_prices.get(crop_name.lower(), {'delhi': 100})
+    
+    records = []
+    for market, price in crop_data.items():
+        records.append({
+            'market': market.capitalize(),
+            'modal_price': price,
+            'min_price': price - 50,
+            'max_price': price + 50
+        })
+    
+    return records
+
+def decimal_default(obj):
+    """JSON serializer for Decimal objects"""
+    if isinstance(obj, Decimal):
+        return float(obj)
+    raise TypeError
+```
+
+**Lambda Configuration:**
+- Runtime: Python 3.11
+- Memory: 256 MB
+- Timeout: 10 seconds
+- Environment Variables: API_KEY, REGION
+
+#### Lambda Function 2: AI Advisory Service (Amazon Bedrock Integration)
+
+**Purpose:** Provide AI-powered agricultural advice using Amazon Bedrock
+
+**File:** `lambda_ai_advisor.py`
+
+```python
+import json
+import boto3
+from datetime import datetime
+
+# Initialize Bedrock client
+bedrock_runtime = boto3.client('bedrock-runtime', region_name='us-east-1')
+
+def lambda_handler(event, context):
+    """
+    Process agricultural queries using Amazon Bedrock
+    
+    Event Structure:
+    {
+        "body": {
+            "query": "What is the best time to plant wheat?",
+            "language": "hi",
+            "context": {
+                "location": "Punjab",
+                "season": "winter"
+            }
+        }
+    }
+    """
+    
+    try:
+        # Parse request body
+        if isinstance(event.get('body'), str):
+            body = json.loads(event['body'])
+        else:
+            body = event.get('body', {})
+        
+        user_query = body.get('query', '')
+        language = body.get('language', 'en')
+        context_info = body.get('context', {})
+        
+        if not user_query:
+            return {
+                'statusCode': 400,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps({
+                    'error': 'Query is required',
+                    'message': 'Please provide a query in the request body'
+                })
+            }
+        
+        # Prepare prompt for Bedrock
+        system_prompt = """You are an expert agricultural advisor for Indian farmers. 
+        Provide practical, actionable advice in simple language. Consider regional 
+        variations, seasonal factors, and traditional farming practices. Focus on:
+        - Crop selection and rotation
+        - Planting and harvesting schedules
+        - Pest and disease management
+        - Irrigation and water management
+        - Fertilizer recommendations
+        - Market timing and price trends
+        - Weather-based guidance
+        
+        Always provide answers that are culturally appropriate and practical for 
+        small-scale Indian farmers."""
+        
+        user_prompt = f"""
+        Farmer's Question: {user_query}
+        Location: {context_info.get('location', 'India')}
+        Season: {context_info.get('season', 'current')}
+        Language: {language}
+        
+        Please provide a helpful, concise answer in {language} language.
+        """
+        
+        # Call Amazon Bedrock
+        response = invoke_bedrock_model(system_prompt, user_prompt)
+        
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({
+                'query': user_query,
+                'advice': response,
+                'language': language,
+                'timestamp': datetime.now().isoformat(),
+                'source': 'Amazon Bedrock AI'
+            })
+        }
+        
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({
+                'error': 'Internal Server Error',
+                'message': str(e)
+            })
+        }
+
+def invoke_bedrock_model(system_prompt, user_prompt):
+    """Invoke Amazon Bedrock foundation model"""
+    
+    # Using Claude 3 Sonnet model (adjust model ID as needed)
+    model_id = "anthropic.claude-3-sonnet-20240229-v1:0"
+    
+    request_body = {
+        "anthropic_version": "bedrock-2023-05-31",
+        "max_tokens": 1000,
+        "system": system_prompt,
+        "messages": [
+            {
+                "role": "user",
+                "content": user_prompt
+            }
+        ],
+        "temperature": 0.7,
+        "top_p": 0.9
+    }
+    
+    try:
+        response = bedrock_runtime.invoke_model(
+            modelId=model_id,
+            body=json.dumps(request_body)
+        )
+        
+        response_body = json.loads(response['body'].read())
+        advice_text = response_body['content'][0]['text']
+        
+        return advice_text
+        
+    except Exception as e:
+        print(f"Bedrock invocation error: {str(e)}")
+        return "I apologize, but I'm unable to provide advice at this moment. Please try again later."
+```
+
+**Lambda Configuration:**
+- Runtime: Python 3.11
+- Memory: 512 MB
+- Timeout: 30 seconds
+- IAM Role: Permissions for bedrock:InvokeModel
+
+### Frontend API Integration
+
+#### JavaScript API Client (script.js)
+
+```javascript
+// API Configuration
+const API_CONFIG = {
+    baseUrl: 'https://YOUR_API_GATEWAY_ID.execute-api.us-east-1.amazonaws.com/prod',
+    endpoints: {
+        prices: '/prices',
+        aiAdvice: '/ai-advice',
+        translate: '/translate'
+    }
+};
+
+// Fetch market prices for a specific crop
+async function fetchMarketPrices(cropName, location = 'all') {
+    try {
+        const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.prices}/${cropName}?location=${location}`;
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data;
+        
+    } catch (error) {
+        console.error('Error fetching market prices:', error);
+        
+        // Return cached data if available
+        const cachedData = getCachedPrices(cropName);
+        if (cachedData) {
+            return cachedData;
+        }
+        
+        throw error;
+    }
+}
+
+// Get AI-powered agricultural advice
+async function getAIAdvice(query, language = 'hi', context = {}) {
+    try {
+        const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.aiAdvice}`;
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                query: query,
+                language: language,
+                context: context
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data;
+        
+    } catch (error) {
+        console.error('Error getting AI advice:', error);
+        throw error;
+    }
+}
+
+// Update UI with market prices
+async function updatePricesUI() {
+    const crops = ['wheat', 'onion', 'potato', 'tomato', 'rice'];
+    
+    for (const crop of crops) {
+        try {
+            const priceData = await fetchMarketPrices(crop);
+            displayPrices(crop, priceData);
+            
+            // Cache the data
+            cachePrices(crop, priceData);
+            
+        } catch (error) {
+            console.error(`Failed to fetch prices for ${crop}:`, error);
+            showPriceError(crop);
+        }
+    }
+}
+
+// Handle voice query for AI advice
+async function handleVoiceQuery(transcript, language) {
+    try {
+        // Show loading state
+        updateStatus('processing');
+        
+        // Get AI advice
+        const response = await getAIAdvice(transcript, language, {
+            location: getUserLocation(),
+            season: getCurrentSeason()
+        });
+        
+        // Display the advice
+        displayAIAdvice(response.advice, language);
+        
+        // Speak the response
+        speakText(response.advice, language);
+        
+        updateStatus('micReady');
+        
+    } catch (error) {
+        console.error('Error processing voice query:', error);
+        updateStatus('error');
+        showErrorMessage('Unable to process your query. Please try again.');
+    }
+}
+
+// Cache management
+function cachePrices(crop, data) {
+    const cacheKey = `prices_${crop}`;
+    const cacheData = {
+        data: data,
+        timestamp: Date.now()
+    };
+    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+}
+
+function getCachedPrices(crop) {
+    const cacheKey = `prices_${crop}`;
+    const cached = localStorage.getItem(cacheKey);
+    
+    if (!cached) return null;
+    
+    const cacheData = JSON.parse(cached);
+    const age = Date.now() - cacheData.timestamp;
+    
+    // Cache valid for 30 minutes
+    if (age < 30 * 60 * 1000) {
+        return cacheData.data;
+    }
+    
+    return null;
+}
+
+// Helper functions
+function getUserLocation() {
+    return localStorage.getItem('userLocation') || 'India';
+}
+
+function getCurrentSeason() {
+    const month = new Date().getMonth();
+    if (month >= 2 && month <= 5) return 'summer';
+    if (month >= 6 && month <= 9) return 'monsoon';
+    return 'winter';
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updatePricesUI();
+    setInterval(updatePricesUI, 30 * 60 * 1000); // Update every 30 minutes
+});
+```
 
 ### Translation Engine
 
@@ -715,54 +1295,125 @@ describe('Accessibility', () => {
 
 ## Implementation Phases
 
-### Phase 1: Core Infrastructure (Week 1-2)
-- Basic HTML structure and responsive layout
-- CSS design system implementation
-- Language selector and basic localization
-- Service worker setup for PWA
+### Phase 1: AWS Infrastructure Setup (Week 1)
+- Set up AWS account and configure IAM roles
+- Create API Gateway REST API
+- Deploy Lambda functions for price fetching
+- Configure Amazon Bedrock access
+- Set up CloudWatch logging and monitoring
+- Create basic HTML structure and responsive layout
 
-### Phase 2: Translation Engine (Week 3-4)
-- Web Speech API integration
-- Basic text translation functionality
-- Voice-to-voice translation pipeline
-- Offline translation capabilities
+### Phase 2: Frontend Development (Week 2-3)
+- Implement voice-first UI with Web Speech API
+- Build responsive CSS design system
+- Create language selector and localization
+- Implement offline caching with Service Worker
+- Build chat interface components
 
-### Phase 3: Price Discovery (Week 5-6)
-- Market data API integration
-- Real-time price display
-- Caching and offline support
-- Price comparison features
+### Phase 3: AWS Lambda Integration (Week 4)
+- Complete price fetcher Lambda function
+- Integrate government Mandi APIs
+- Implement error handling and retry logic
+- Add caching mechanisms
+- Test API Gateway endpoints
 
-### Phase 4: Chat Interface (Week 7-8)
-- Bilingual chat implementation
-- Message translation
-- Price highlighting and extraction
-- Negotiation history
+### Phase 4: Amazon Bedrock AI Integration (Week 5-6)
+- Set up Bedrock foundation model access
+- Implement AI advisory Lambda function
+- Create multilingual prompt engineering
+- Build translation service using Bedrock
+- Test AI responses for accuracy
 
-### Phase 5: Testing and Optimization (Week 9-10)
-- Property-based test implementation
-- Performance optimization
-- Accessibility testing and fixes
-- User acceptance testing
+### Phase 5: Frontend-Backend Integration (Week 7)
+- Connect frontend to API Gateway
+- Implement fetch() calls for all endpoints
+- Add loading states and error handling
+- Build real-time price updates
+- Integrate voice queries with AI advisor
+
+### Phase 6: Multilingual Support (Week 8)
+- Implement language detection
+- Add support for Hindi, Tamil, Telugu, Bengali, Gujarati
+- Test script rendering (Devanagari, Tamil, Telugu)
+- Implement voice output in regional languages
+- Validate translation accuracy
+
+### Phase 7: Testing and Optimization (Week 9)
+- Performance testing and optimization
+- Accessibility testing (WCAG 2.1 AA)
+- Cross-browser and device testing
+- Load testing for Lambda functions
+- Security audit
+
+### Phase 8: Documentation and Deployment (Week 10)
+- Complete technical documentation
+- Create user guides in multiple languages
+- Prepare hackathon presentation
+- Deploy to production
+- Final testing and bug fixes
 
 ## Success Metrics
 
-### Performance Metrics
-- **Translation Speed**: < 3 seconds for voice, < 2 seconds for text
-- **Load Time**: < 8 seconds on 3G networks
+### Technical Performance Metrics
+- **AI Response Time**: < 5 seconds for Amazon Bedrock queries
+- **Lambda Execution**: < 3 seconds for price fetching
+- **API Gateway Latency**: < 500ms for routing
+- **Frontend Load Time**: < 8 seconds on 3G networks
 - **UI Responsiveness**: < 200ms for all interactions
 - **Offline Capability**: 90% functionality without internet
 
 ### Quality Metrics
-- **Translation Accuracy**: > 85% for agricultural terminology
+- **Translation Accuracy**: > 90% for agricultural terminology (Amazon Bedrock)
+- **AI Advice Relevance**: > 85% user satisfaction rating
 - **Accessibility Score**: WCAG 2.1 AA compliance
 - **Cross-browser Support**: 95% functionality on major mobile browsers
 - **Error Rate**: < 5% for core user flows
+- **AWS Uptime**: 99.5% availability
 
 ### User Experience Metrics
 - **Task Completion**: > 90% success rate for primary user flows
 - **User Satisfaction**: > 4.0/5.0 rating from rural user testing
-- **Language Coverage**: Support for 5 major Indian languages
+- **Language Coverage**: Support for 6 languages (Hindi, Tamil, Telugu, Bengali, Gujarati, English)
+- **Voice-First Adoption**: > 70% of users prefer voice over text input
 - **Cultural Appropriateness**: Positive feedback on design and iconography
 
-This design document provides a comprehensive blueprint for implementing The Multilingual Mandi platform with a focus on accessibility, performance, and cultural appropriateness for the target audience of rural Indian vendors and farmers.
+### Impact Metrics (Student Track Focus)
+- **Farmers Reached**: Target 1000+ farmers in pilot phase
+- **Fair Price Awareness**: 80% of users report better price knowledge
+- **Language Barrier Reduction**: 90% of users can access information in native language
+- **AI Advisory Usage**: 60% of users actively seek agricultural advice
+- **Community Impact**: Measurable improvement in farmer income through better price negotiation
+
+## AWS Cost Optimization
+
+### Estimated Monthly Costs (Student/Development)
+- **API Gateway**: ~$3.50 (1M requests)
+- **Lambda**: ~$5.00 (compute time)
+- **Amazon Bedrock**: ~$20.00 (foundation model usage)
+- **CloudWatch**: ~$2.00 (logging and monitoring)
+- **Total**: ~$30.50/month for development
+
+### Cost Optimization Strategies
+- Use Lambda free tier (1M requests/month)
+- Implement aggressive caching (30-minute TTL)
+- Optimize Bedrock token usage
+- Use CloudWatch Logs Insights sparingly
+- Implement request throttling
+
+## Security and Compliance
+
+### AWS Security Best Practices
+- IAM roles with least privilege access
+- API Gateway with API keys and throttling
+- Lambda environment variables for secrets
+- HTTPS/TLS 1.3 for all communications
+- CloudWatch for security monitoring
+
+### Data Privacy
+- No PII storage in AWS services
+- Voice data processed and immediately deleted
+- Session-based interactions only
+- GDPR-compliant data handling
+- Transparent data usage policies
+
+This design document provides a comprehensive blueprint for implementing Mandi AI with AWS-first architecture, specifically tailored for the Student Track of the AWS AI for Bharat Hackathon, focusing on community impact and accessibility for rural Indian farmers.
